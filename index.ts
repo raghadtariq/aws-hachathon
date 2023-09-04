@@ -1,8 +1,9 @@
 import express from 'express';
 import multer from 'multer';
 import fs from 'fs';
+import celebsRouter from './routers/celebs.js';
+import textRouter from './routers/text.js';
 import dataSource from "./db/dataSource.js";
-
 const AWS = require("aws-sdk");
 AWS.config.update({ region: 'us-west-2' });
 const rekognition = new AWS.Rekognition();
@@ -11,6 +12,8 @@ console.log('Region: ' + AWS.config.region);
 var app = express();
 
 const PORT = 5000;
+app.use('/celebs', celebsRouter);
+app.use('/text', textRouter);
 
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
@@ -37,6 +40,14 @@ app.post('/upload', upload.single('file'), (req, res) => {
     file: fileURL
   });
 });
+
+app.get('/health', (req, res) => {
+  res.status(200).send("Everything good");
+})
+
+app.get('/', (req, res) => {
+  res.status(200).send("Welcome to our application.");
+})
 
 app.post('/labels', upload.single('file'), async (req, res) => {
   try {
@@ -67,7 +78,7 @@ app.post('/labels', upload.single('file'), async (req, res) => {
   }
 });
 
-app.post('/celebs', upload.single('file'), async (req, res) => {
+/*app.post('/celebs', upload.single('file'), async (req, res) => {
   try {
     // Check if a file was uploaded in the request
     if (!req.file) {
@@ -134,10 +145,12 @@ app.post('/text', upload.single('file'), async (req, res) => {
       console.log("ERROR: " + err);
       res.send(err);
   }  
-});
+});*/
 
 app.listen(PORT, () => {
   console.log(`App is listening on port ${PORT}`);
+  dataSource.initialize();
+
 });
 
 export default app;

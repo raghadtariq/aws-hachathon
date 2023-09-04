@@ -1,5 +1,6 @@
 import { DataSource } from "typeorm";
-import { Image } from "./entities/Image.js";
+import { CelebImage } from "./entities/CelebImage.js";
+import { TextImage } from "./entities/TextImage.js";
 
 const dataSource = new DataSource({
     type: "mysql",

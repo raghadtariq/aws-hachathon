@@ -1,14 +1,13 @@
-
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class Image extends BaseEntity {
-  @PrimaryGeneratedColumn("uuid")
-  id: string;
+export class CelebImage extends BaseEntity {
+  @PrimaryGeneratedColumn("increment")
+  id: number;
 
   @Column({nullable:false})
   imagepath: string;
 
-  @Column({nullable:false})
+  @Column({nullable: false, default: 'Nothing Detected.'})
   result: string;
 }
